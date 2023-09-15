@@ -24,7 +24,13 @@ app.post("/inscritos", (req, res) => {
     db.inscritos.push(...oldInscritos, newInscrito);
 
     const fs = require("fs");
-    fs.writeFileSync("./db.json", JSON.stringify(db, null, 2));
+    fs.writeFile("./db.json", JSON.stringify(db, null, 2), (err: any) => {
+      if (err) {
+        console.error("Erro ao escrever o arquivo JSON:", err);
+      } else {
+        console.log("Arquivo JSON atualizado com sucesso.");
+      }
+    });
 
     res.json(newInscrito);
   } catch (err) {
