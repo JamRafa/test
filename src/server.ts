@@ -9,7 +9,7 @@ const port = process.env.PORT ?? 4000
 // Rota GET para listar inscritos
 app.get("/inscritos", (req, res) => {
   // Supondo que você tenha um arquivo "db.json" com os dados
-  const inscritos = require("./db.json").inscritos;
+  const inscritos = require("../db.json").inscritos;
   res.json(inscritos);
 });
 
@@ -17,11 +17,12 @@ app.get("/inscritos", (req, res) => {
 app.post("/inscritos", (req, res) => {
   const newInscrito = req.body;
 
-  // Supondo que você tenha um arquivo "db.json" com os dados
-  const db = require("./db.json");
-  db.inscritos.push(newInscrito);
+  const oldInscritos = require("../db.json").inscritos;
+  console.log(oldInscritos)
 
-  // Salvar a atualização no arquivo "db.json"
+  const db = require("./db.json");
+  db.inscritos.push(...oldInscritos ,newInscrito);
+
   const fs = require("fs");
   fs.writeFileSync("./db.json", JSON.stringify(db, null, 2));
 
