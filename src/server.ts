@@ -1,10 +1,9 @@
-import express from 'express'
+import express from "express";
 
-const app = express()
-app.use(express.json())
+const app = express();
+app.use(express.json());
 
-const port = process.env.PORT ?? 4000
-
+const port = process.env.PORT ?? 4000;
 
 // Rota GET para listar inscritos
 app.get("/inscritos", (req, res) => {
@@ -15,18 +14,22 @@ app.get("/inscritos", (req, res) => {
 
 // Rota POST para criar um novo inscrito
 app.post("/inscritos", (req, res) => {
-  const newInscrito = req.body;
+  try {
+    const newInscrito = req.body;
 
-  const oldInscritos = require("../db.json").inscritos;
-  console.log(oldInscritos)
+    const oldInscritos = require("../db.json").inscritos;
+    console.log(oldInscritos);
 
-  const db = require("./db.json");
-  db.inscritos.push(...oldInscritos ,newInscrito);
+    const db = require("./db.json");
+    db.inscritos.push(...oldInscritos, newInscrito);
 
-  const fs = require("fs");
-  fs.writeFileSync("./db.json", JSON.stringify(db, null, 2));
+    const fs = require("fs");
+    fs.writeFileSync("./db.json", JSON.stringify(db, null, 2));
 
-  res.json(newInscrito);
+    res.json(newInscrito);
+  } catch (err) {
+    console.log(err, "nao deu");
+  }
 });
 
 app.listen(port, () => {
