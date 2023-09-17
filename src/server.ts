@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import cors from "cors";
 
 const corsOptions = {
-  origin: "http://127.0.0.1:5500/", // Replace with your frontend's URL
+  origin: "http://127.0.0.1:5500", // Replace with your frontend's URL
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   optionsSuccessStatus: 204,
