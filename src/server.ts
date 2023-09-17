@@ -1,4 +1,20 @@
 import express from "express";
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, get, push } from "firebase/database";
+import { v4 as uuidv4 } from 'uuid';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAnT-E77StOZY05pvI8hKIus35x5dgC2UE",
+  authDomain: "encontro-a2dfd.firebaseapp.com",
+  projectId: "encontro-a2dfd",
+  storageBucket: "encontro-a2dfd.appspot.com",
+  messagingSenderId: "264660272963",
+  appId: "1:264660272963:web:95c0b38734d31a953491f6",
+  measurementId: "G-8JV3CFQH4R"
+};
+
+const fireBaseApp = initializeApp(firebaseConfig)
+const db = getDatabase(fireBaseApp)
 
 const app = express();
 app.use(express.json());
@@ -6,35 +22,45 @@ app.use(express.json());
 const port = process.env.PORT ?? 4000;
 
 // Rota GET para listar inscritos
-app.get("/inscritos", (req, res) => {
-  // Supondo que você tenha um arquivo "db.json" com os dados
-  const inscritos = require("../db.json").inscritos;
-  res.json(inscritos);
+app.get("/inscritos", async (req, res) => {
+  try {
+    //const db = getDatabase();
+    
+    const inscritosRef = ref(db, "inscritos");
+    
+    const snapshot = await get(inscritosRef);
+
+    if (snapshot.exists()) {
+      const inscritos = snapshot.val();
+      
+      res.json(inscritos);
+    } else {
+      res.json([]);
+    }
+  } catch (err) {
+    console.error("Erro ao obter dados do Firebase:", err);
+    res.status(500).json({ error: "Erro ao obter dados do Firebase" });
+  }
 });
 
-// Rota POST para criar um novo inscrito
-app.post("/inscritos", (req, res) => {
+app.post("/inscritos", async (req, res) => {
   try {
+    req.body.id = uuidv4()
+    req.body.pagamento = false
     const newInscrito = req.body;
 
-    const oldInscritos = require("../db.json").inscritos;
-    console.log(oldInscritos);
+    const db = getDatabase();
 
-    const db = require("./db.json");
-    db.inscritos.push(...oldInscritos, newInscrito);
+    const inscritosRef = ref(db, "inscritos");
 
-    const fs = require("fs");
-    fs.writeFile("./db.json", JSON.stringify(db, null, 2), (err: any) => {
-      if (err) {
-        console.error("Erro ao escrever o arquivo JSON:", err);
-      } else {
-        console.log("Arquivo JSON atualizado com sucesso.");
-      }
-    });
+    const novoInscritoRef = push(inscritosRef, newInscrito);
 
-    res.json(newInscrito);
+    const novoInscritoKey = novoInscritoRef.key;
+
+    res.json({ id: novoInscritoKey, ...newInscrito });
   } catch (err) {
-    console.log(err, "nao deu");
+    console.error("Erro ao adicionar novo inscrito:", err);
+    res.status(500).json({ error: "Erro ao adicionar novo inscrito" });
   }
 });
 
