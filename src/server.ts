@@ -5,11 +5,12 @@ import { v4 as uuidv4 } from "uuid";
 import cors from "cors";
 
 const corsOptions = {
-  origin: "http://127.0.0.1:5500", // Replace with your frontend's URL
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  origin: '*', // Ou configure para a origem específica do seu aplicativo
+  methods: 'GET, POST, PUT, DELETE',
+  allowedHeaders: 'Content-Type, Authorization',
   credentials: true,
-  optionsSuccessStatus: 204,
 };
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyAnT-E77StOZY05pvI8hKIus35x5dgC2UE",
