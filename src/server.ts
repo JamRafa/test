@@ -1,7 +1,15 @@
 import express from "express";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, get, push } from "firebase/database";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
+import cors from "cors";
+
+const corsOptions = {
+  origin: "https://test-brown-zeta.vercel.app/inscritos", // Replace with your frontend's URL
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+  optionsSuccessStatus: 204,
+};
 
 const firebaseConfig = {
   apiKey: "AIzaSyAnT-E77StOZY05pvI8hKIus35x5dgC2UE",
@@ -10,34 +18,34 @@ const firebaseConfig = {
   storageBucket: "encontro-a2dfd.appspot.com",
   messagingSenderId: "264660272963",
   appId: "1:264660272963:web:95c0b38734d31a953491f6",
-  measurementId: "G-8JV3CFQH4R"
+  measurementId: "G-8JV3CFQH4R",
 };
 
-const fireBaseApp = initializeApp(firebaseConfig)
-const db = getDatabase(fireBaseApp)
+const fireBaseApp = initializeApp(firebaseConfig);
+const db = getDatabase(fireBaseApp);
 
 const app = express();
 app.use(express.json());
+app.use(cors(corsOptions));
 
 const port = process.env.PORT ?? 4000;
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
+  res.header("Access-Control-Allow-Origin", "*");
   next();
 });
-
 
 app.get("/inscritos", async (req, res) => {
   try {
     //const db = getDatabase();
-    
+
     const inscritosRef = ref(db, "inscritos");
-    
+
     const snapshot = await get(inscritosRef);
 
     if (snapshot.exists()) {
       const inscritos = snapshot.val();
-      
+
       res.json(inscritos);
     } else {
       res.json([]);
@@ -50,8 +58,8 @@ app.get("/inscritos", async (req, res) => {
 
 app.post("/inscritos", async (req, res) => {
   try {
-    req.body.id = uuidv4()
-    req.body.pagamento = false
+    req.body.id = uuidv4();
+    req.body.pagamento = false;
     const newInscrito = req.body;
 
     const db = getDatabase();
