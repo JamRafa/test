@@ -21,7 +21,12 @@ app.use(express.json());
 
 const port = process.env.PORT ?? 4000;
 
-// Rota GET para listar inscritos
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
+
+
 app.get("/inscritos", async (req, res) => {
   try {
     //const db = getDatabase();
