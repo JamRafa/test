@@ -74,6 +74,7 @@ app.get("/inscritos", async (req, res) => {
 });
 
 app.post("/inscritos", async (req, res) => {
+  console.log(req.body)
   try {
     req.body.id = uuidv4();
     req.body.pagamento = false;
