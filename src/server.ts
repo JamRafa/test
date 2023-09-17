@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import cors from "cors";
 
 const corsOptions = {
-  origin: "https://test-brown-zeta.vercel.app/inscritos", // Replace with your frontend's URL
+  origin: "", // Replace with your frontend's URL
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   optionsSuccessStatus: 204,
@@ -29,6 +29,23 @@ app.use(express.json());
 app.use(cors(corsOptions));
 
 const port = process.env.PORT ?? 4000;
+
+app.use((req, res, next) => {
+  // Obter o cabeçalho "Origin" da solicitação (para CORS)
+  const originHeader = req.get('Origin');
+  
+  // Obter o cabeçalho "Referer" da solicitação
+  const refererHeader = req.get('Referer');
+
+  // Registrar as informações em seus logs
+  console.log(`Origin Header: ${originHeader}`);
+  console.log(`Referer Header: ${refererHeader}`);
+  
+  // Continuar com o processamento da solicitação
+  next();
+});
+
+
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -80,3 +97,4 @@ app.post("/inscritos", async (req, res) => {
 app.listen(port, () => {
   console.log(`Servidor está rodando na porta ${port}`);
 });
+
