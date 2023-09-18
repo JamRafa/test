@@ -4,7 +4,6 @@ import { getDatabase, ref, get, push } from "firebase/database";
 import { v4 as uuidv4 } from "uuid";
 import cors from "cors";
 
-
 const firebaseConfig = {
   apiKey: "AIzaSyAnT-E77StOZY05pvI8hKIus35x5dgC2UE",
   authDomain: "encontro-a2dfd.firebaseapp.com",
@@ -20,11 +19,17 @@ const db = getDatabase(fireBaseApp);
 
 const app = express();
 app.use(express.json());
-app.use(cors({ origin: '*' }));
+
 
 const port = process.env.PORT ?? 4000;
 
-app.options("*", cors());
+app.use((req, res, next) => {
+  console.log('rod')
+  res.header('Access-Control-Allow-Origin', '*'); // Permitir solicitações de qualquer origem (pode ser restrito se necessário)
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
 
 app.get("/inscritos", async (req, res) => {
   try {
