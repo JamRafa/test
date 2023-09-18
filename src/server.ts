@@ -23,8 +23,8 @@ app.use(express.json());
 
 const port = process.env.PORT ?? 4000;
 
+console.log('rod')
 app.use((req, res, next) => {
-  console.log('rod')
   res.header('Access-Control-Allow-Origin', '*'); // Permitir solicitações de qualquer origem (pode ser restrito se necessário)
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
