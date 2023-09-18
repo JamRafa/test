@@ -24,27 +24,14 @@ app.use(cors({ origin: '*' }));
 
 const port = process.env.PORT ?? 4000;
 
-app.use((req, res, next) => {
-  // Obter o cabeçalho "Origin" da solicitação (para CORS)
-  const originHeader = req.get('Origin');
-  
-  // Obter o cabeçalho "Referer" da solicitação
-  const refererHeader = req.get('Referer');
-
-  // Registrar as informações em seus logs
-  console.log(`Origin Header: ${originHeader}`);
-  console.log(`Referer Header: ${refererHeader}`);
-  
-  // Continuar com o processamento da solicitação
-  next();
-});
-
-
-
-app.use((req, res, next) => {
+app.options("/inscritos", (req, res) => {
+  // Defina os cabeçalhos CORS necessários para preflight requests
   res.header("Access-Control-Allow-Origin", "*");
-  next();
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS"); // Inclua os métodos permitidos
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  res.status(200).send();
 });
+
 
 app.get("/inscritos", async (req, res) => {
   try {

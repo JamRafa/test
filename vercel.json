@@ -8,8 +8,9 @@
   ],
   "routes": [
     {
-      "src": "/inscritos",
+      "src": "(.*)",
       "dest": "src/server.ts",
+      "methods": ["OPTIONS", "GET", "POST"], 
       "headers": {
         "Access-Control-Allow-Origin": "*"
       }
