@@ -24,14 +24,7 @@ app.use(cors({ origin: '*' }));
 
 const port = process.env.PORT ?? 4000;
 
-app.options("/inscritos", (req, res) => {
-  // Defina os cabeçalhos CORS necessários para preflight requests
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS"); // Inclua os métodos permitidos
-  res.header("Access-Control-Allow-Headers", "Content-Type");
-  res.status(200).send();
-});
-
+app.options("*", cors());
 
 app.get("/inscritos", async (req, res) => {
   try {
@@ -57,7 +50,7 @@ app.get("/inscritos", async (req, res) => {
 app.post("/inscritos", async (req, res) => {
   console.log(req.body)
   try {
-    req.body.id = uuidv4();
+    //req.body.id = uuidv4();
     req.body.pagamento = false;
     const newInscrito = req.body;
 
