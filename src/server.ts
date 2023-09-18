@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getDatabase, ref, get, push } from "firebase/database";
 import { v4 as uuidv4 } from "uuid";
 import cors from "cors";
-import proxy from "express-http-proxy";
+import { Request, Response, NextFunction } from "express";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAnT-E77StOZY05pvI8hKIus35x5dgC2UE",
@@ -20,16 +20,9 @@ const db = getDatabase(fireBaseApp);
 
 const app = express();
 app.use(express.json());
-
+app.use(cors())
 
 const port = process.env.PORT ?? 4000;
-
-app.use(
-  "/inscritos",
-  proxy("http://test-brown-zeta.vercel.app", {
-    proxyReqPathResolver: (req) => `/inscritos${req.url}`,
-  })
-);
 
 
 app.get("/inscritos", async (req, res) => {
@@ -54,7 +47,7 @@ app.get("/inscritos", async (req, res) => {
 });
 
 app.post("/inscritos", async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   try {
     req.body.id = uuidv4();
     req.body.pagamento = false;
@@ -78,4 +71,3 @@ app.post("/inscritos", async (req, res) => {
 app.listen(port, () => {
   console.log(`Servidor está rodando na porta ${port}`);
 });
-
