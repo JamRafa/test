@@ -12,7 +12,7 @@
       "src": "/inscritos",
       "methods": ["GET", "POST"],
       "headers": {
-        "Access-Control-Allow-Origin": "http://test-brown-zeta.vercel.app"
+        "Access-Control-Allow-Origin": "*"
       }
     }
   ]
