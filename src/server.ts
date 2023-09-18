@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getDatabase, ref, get, push } from "firebase/database";
 import { v4 as uuidv4 } from "uuid";
 import cors from "cors";
+import proxy from "express-http-proxy";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAnT-E77StOZY05pvI8hKIus35x5dgC2UE",
@@ -23,12 +24,12 @@ app.use(express.json());
 
 const port = process.env.PORT ?? 4000;
 
-console.log('rod')
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*'); // Permitir solicitações de qualquer origem (pode ser restrito se necessário)
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  next();
-});
+app.use(
+  "/inscritos",
+  proxy("http://test-brown-zeta.vercel.app", {
+    proxyReqPathResolver: (req) => `/inscritos${req.url}`,
+  })
+);
 
 
 app.get("/inscritos", async (req, res) => {
@@ -55,7 +56,7 @@ app.get("/inscritos", async (req, res) => {
 app.post("/inscritos", async (req, res) => {
   console.log(req.body)
   try {
-    //req.body.id = uuidv4();
+    req.body.id = uuidv4();
     req.body.pagamento = false;
     const newInscrito = req.body;
 
