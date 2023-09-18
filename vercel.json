@@ -8,11 +8,11 @@
   ],
   "routes": [
     {
-      "src": "(.*)",
       "dest": "src/server.ts",
-      "methods": ["OPTIONS", "GET", "POST"], 
+      "src": "/inscritos",
+      "methods": ["GET", "POST"],
       "headers": {
-        "Access-Control-Allow-Origin": "*"
+        "Access-Control-Allow-Origin": "http://test-brown-zeta.vercel.app"
       }
     }
   ]
