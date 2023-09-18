@@ -4,13 +4,6 @@ import { getDatabase, ref, get, push } from "firebase/database";
 import { v4 as uuidv4 } from "uuid";
 import cors from "cors";
 
-const corsOptions = {
-  origin: '*', // Ou configure para a origem específica do seu aplicativo
-  methods: 'GET, POST, PUT, DELETE',
-  allowedHeaders: 'Content-Type, Authorization',
-  credentials: true,
-};
-
 
 const firebaseConfig = {
   apiKey: "AIzaSyAnT-E77StOZY05pvI8hKIus35x5dgC2UE",
@@ -27,7 +20,7 @@ const db = getDatabase(fireBaseApp);
 
 const app = express();
 app.use(express.json());
-app.use(cors(corsOptions));
+app.use(cors());
 
 const port = process.env.PORT ?? 4000;
 
