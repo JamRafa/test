@@ -21,16 +21,15 @@ const db = getDatabase(fireBaseApp);
 const app = express();
 app.use(express.json());
 app.use((req, res, next) => {
-	//Qual site tem permissão de realizar a conexão, no exemplo abaixo está o "*" indicando que qualquer site pode fazer a conexão
-    res.header("Access-Control-Allow-Origin", "*");
-	//Quais são os métodos que a conexão pode realizar na API
-    res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
-    app.use(cors());
-    next();
+  //Qual site tem permissão de realizar a conexão, no exemplo abaixo está o "*" indicando que qualquer site pode fazer a conexão
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  //Quais são os métodos que a conexão pode realizar na API
+  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+  app.use(cors());
+  next();
 });
 
 const port = process.env.PORT ?? 4000;
-
 
 app.get("/inscritos", async (req, res) => {
   try {
